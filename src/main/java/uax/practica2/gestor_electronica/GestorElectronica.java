@@ -1,6 +1,7 @@
 package uax.practica2.gestor_electronica;
 import uax.practica2.articulo_electronico.ArticuloElectronico;
 import uax.practica2.marca.Marca;
+import uax.practica2.movil.Movil;
 import uax.practica2.televisor.Televisor;
 
 import java.util.*;
@@ -23,6 +24,15 @@ public class GestorElectronica {
         }
     }
 
+    public void añadirMovil(String nombreMarca, Movil movil) {
+        Marca marca = buscarMarca(nombreMarca);
+        if (marca != null) {
+            articulos.add(movil);
+        } else {
+            System.out.println("Marca no encontrada.");
+        }
+    }
+
     public Marca buscarMarca(String nombre) {
         for (Marca m : marcas) {
             if (m.getNombre().equalsIgnoreCase(nombre)) {
@@ -30,6 +40,10 @@ public class GestorElectronica {
             }
         }
         return null;
+    }
+
+    public List<ArticuloElectronico> getArticulos() {
+        return articulos;
     }
 
     public void listarMarcas() {
@@ -46,4 +60,3 @@ public class GestorElectronica {
         }
     }
 }
-
