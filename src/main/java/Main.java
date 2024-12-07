@@ -1,6 +1,9 @@
 import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Scanner;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 import uax.practica2.articulo_electronico.ArticuloElectronico;
 import uax.practica2.gestor_electronica.GestorElectronica;
@@ -33,26 +36,30 @@ public class Main {
 
                 switch (opcion) {
                     case 1:
-                        System.out.print("Ingrese el nombre de la marca: ");
-                        String nombreMarca = scanner.nextLine();
+                        System.out.print("Ingrese el nombre de la marca (apple/android): ");
+                        String nombreMarca = scanner.nextLine().toLowerCase();
+                        if (!nombreMarca.equals("apple") && !nombreMarca.equals("android")) {
+                            System.out.println("Marca no válida. Solo se permiten 'apple' o 'android'.");
+                            break;
+                        }
                         System.out.print("Ingrese el país de la marca: ");
                         String paisMarca = scanner.nextLine();
-                        System.out.print("Ingrese la facturación de la marca: ");
-                        double facturacionMarca = scanner.nextDouble();
-                        scanner.nextLine(); // Consumir el salto de línea
+                        System.out.print("Ingrese la facturación de la marca (puede incluir caracteres monetarios): ");
+                        String facturacionStr = scanner.nextLine();
+                        double facturacionMarca = parseFacturacion(facturacionStr);
                         Marca marca = new Marca(nombreMarca, paisMarca, facturacionMarca);
                         gestor.añadirMarca(marca);
                         break;
                     case 2:
                         System.out.print("Ingrese el nombre de la marca del televisor: ");
-                        String nombreMarcaTelevisor = scanner.nextLine();
+                        String nombreMarcaTelevisor = scanner.nextLine().toLowerCase();
                         Marca marcaTelevisor = gestor.buscarMarca(nombreMarcaTelevisor);
                         if (marcaTelevisor == null) {
                             System.out.println("Marca no encontrada.");
                             break;
                         }
                         System.out.print("Ingrese el nombre del televisor: ");
-                        String nombreTelevisor = scanner.nextLine();
+                        String nombreTelevisor = scanner.nextLine().toLowerCase();
                         System.out.print("Ingrese el precio del televisor: ");
                         double precioTelevisor = scanner.nextDouble();
                         System.out.print("Ingrese el tamaño en pulgadas del televisor: ");
@@ -65,14 +72,14 @@ public class Main {
                         break;
                     case 3:
                         System.out.print("Ingrese el nombre de la marca del móvil: ");
-                        String nombreMarcaMovil = scanner.nextLine();
+                        String nombreMarcaMovil = scanner.nextLine().toLowerCase();
                         Marca marcaMovil = gestor.buscarMarca(nombreMarcaMovil);
                         if (marcaMovil == null) {
                             System.out.println("Marca no encontrada.");
                             break;
                         }
                         System.out.print("Ingrese el nombre del móvil: ");
-                        String nombreMovil = scanner.nextLine();
+                        String nombreMovil = scanner.nextLine().toLowerCase();
                         System.out.print("Ingrese el precio del móvil: ");
                         double precioMovil = scanner.nextDouble();
                         System.out.print("Ingrese el tamaño en GB de la RAM: ");
@@ -85,7 +92,7 @@ public class Main {
                         break;
                     case 4:
                         System.out.print("Ingrese el nombre de la marca: ");
-                        String nombreMarcaBuscar = scanner.nextLine();
+                        String nombreMarcaBuscar = scanner.nextLine().toLowerCase();
                         Marca marcaBuscar = gestor.buscarMarca(nombreMarcaBuscar);
                         if (marcaBuscar != null) {
                             System.out.println("Marca encontrada: " + marcaBuscar.getNombre() + " - " + marcaBuscar.getPais() + " - " + marcaBuscar.getFacturacion());
@@ -95,7 +102,7 @@ public class Main {
                         break;
                     case 5:
                         System.out.print("Ingrese el nombre del televisor: ");
-                        String nombreTelevisorBuscar = scanner.nextLine();
+                        String nombreTelevisorBuscar = scanner.nextLine().toLowerCase();
                         Optional<ArticuloElectronico> televisorBuscar = gestor.getArticulos().stream()
                                 .filter(articulo -> articulo instanceof Televisor && articulo.getNombre().equalsIgnoreCase(nombreTelevisorBuscar))
                                 .findFirst();
@@ -108,7 +115,7 @@ public class Main {
                         break;
                     case 6:
                         System.out.print("Ingrese el nombre del móvil: ");
-                        String nombreMovilBuscar = scanner.nextLine();
+                        String nombreMovilBuscar = scanner.nextLine().toLowerCase();
                         Optional<ArticuloElectronico> movilBuscar = gestor.getArticulos().stream()
                                 .filter(articulo -> articulo instanceof Movil && articulo.getNombre().equalsIgnoreCase(nombreMovilBuscar))
                                 .findFirst();
@@ -138,5 +145,16 @@ public class Main {
         } while (opcion != 9);
 
         scanner.close();
+    }
+
+    private static double parseFacturacion(String facturacionStr) {
+        try {
+            NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+            Number number = format.parse(facturacionStr.replaceAll("[^\\d,\\.]", ""));
+            return number.doubleValue();
+        } catch (ParseException e) {
+            System.out.println("Error al parsear la facturación. Usando valor por defecto 0.");
+            return 0;
+        }
     }
 }
