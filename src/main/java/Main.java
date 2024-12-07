@@ -4,6 +4,8 @@ import java.util.Scanner;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
+import java.util.Arrays;
+import java.util.List;
 
 import uax.practica2.articulo_electronico.ArticuloElectronico;
 import uax.practica2.gestor_electronica.GestorElectronica;
@@ -12,6 +14,12 @@ import uax.practica2.movil.Movil;
 import uax.practica2.televisor.Televisor;
 
 public class Main {
+    private static final List<String> MARCAS_TELEVISOR = Arrays.asList(
+            "samsung", "lg", "sony", "panasonic", "philips", "tcl", "hisense", "vizio", "sharp", "thomson",
+            "xiaomi", "realme", "insignia", "sceptre", "jvc", "bang & olufsen (b&o)", "loewe", "grundig",
+            "toshiba", "haier", "element", "skyworth", "seiki"
+    );
+
     public static void main(String[] args) {
         GestorElectronica gestor = new GestorElectronica();
         Scanner scanner = new Scanner(System.in);
@@ -53,6 +61,10 @@ public class Main {
                     case 2:
                         System.out.print("Ingrese el nombre de la marca del televisor: ");
                         String nombreMarcaTelevisor = scanner.nextLine().toLowerCase();
+                        if (!MARCAS_TELEVISOR.contains(nombreMarcaTelevisor)) {
+                            System.out.println("Marca no existente.");
+                            break;
+                        }
                         Marca marcaTelevisor = gestor.buscarMarca(nombreMarcaTelevisor);
                         if (marcaTelevisor == null) {
                             System.out.println("Marca no encontrada.");
