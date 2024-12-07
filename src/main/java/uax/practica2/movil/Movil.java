@@ -8,6 +8,9 @@ public class Movil extends ArticuloElectronico {
 
     public Movil(double precio, Marca marca, String nombre, int ramGb, String sistemaOperativo) {
         super(precio, marca, nombre);
+        if (!sistemaOperativo.equalsIgnoreCase("android") && !sistemaOperativo.equalsIgnoreCase("ios")) {
+            throw new IllegalArgumentException("Sistema operativo no válido. Debe ser 'Android' o 'iOS'.");
+        }
         this.ramGb = ramGb;
         this.sistemaOperativo = sistemaOperativo;
     }
@@ -16,6 +19,10 @@ public class Movil extends ArticuloElectronico {
     public int getRamGb() { return ramGb; }
     public void setRamGb(int ramGb) { this.ramGb = ramGb; }
     public String getSistemaOperativo() { return sistemaOperativo; }
-    public void setSistemaOperativo(String sistemaOperativo) { this.sistemaOperativo = sistemaOperativo; }
+    public void setSistemaOperativo(String sistemaOperativo) {
+        if (!sistemaOperativo.equalsIgnoreCase("android") && !sistemaOperativo.equalsIgnoreCase("ios")) {
+            throw new IllegalArgumentException("Sistema operativo no válido. Debe ser 'Android' o 'iOS'.");
+        }
+        this.sistemaOperativo = sistemaOperativo;
+    }
 }
-
