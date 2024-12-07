@@ -77,8 +77,9 @@ public class Main {
                         }
                         System.out.print("Ingrese el nombre del televisor: ");
                         String nombreTelevisor = scanner.nextLine().toLowerCase();
-                        System.out.print("Ingrese el precio del televisor: ");
-                        double precioTelevisor = scanner.nextDouble();
+                        System.out.print("Ingrese el precio del televisor (puede incluir caracteres monetarios): ");
+                        String precioTelevisorStr = scanner.nextLine();
+                        double precioTelevisor = parseFacturacion(precioTelevisorStr);
                         System.out.print("Ingrese el tamaño en pulgadas del televisor: ");
                         int tamanioPulgadas = scanner.nextInt();
                         scanner.nextLine(); // Consumir el salto de línea
@@ -92,13 +93,19 @@ public class Main {
                         String nombreMarcaMovil = scanner.nextLine().toLowerCase();
                         Marca marcaMovil = gestor.buscarMarca(nombreMarcaMovil);
                         if (marcaMovil == null) {
-                            System.out.println("Marca no encontrada.");
-                            break;
+                            System.out.print("Ingrese el país de la marca: ");
+                            String paisMarcaMovil = scanner.nextLine();
+                            System.out.print("Ingrese la facturación de la marca (puede incluir caracteres monetarios): ");
+                            String facturacionStrMovil = scanner.nextLine();
+                            double facturacionMarcaMovil = parseFacturacion(facturacionStrMovil);
+                            marcaMovil = new Marca(nombreMarcaMovil, paisMarcaMovil, facturacionMarcaMovil);
+                            gestor.añadirMarca(marcaMovil);
                         }
                         System.out.print("Ingrese el nombre del móvil: ");
                         String nombreMovil = scanner.nextLine().toLowerCase();
-                        System.out.print("Ingrese el precio del móvil: ");
-                        double precioMovil = scanner.nextDouble();
+                        System.out.print("Ingrese el precio del móvil (puede incluir caracteres monetarios): ");
+                        String precioMovilStr = scanner.nextLine();
+                        double precioMovil = parseFacturacion(precioMovilStr);
                         System.out.print("Ingrese el tamaño en GB de la RAM: ");
                         int ramGb = scanner.nextInt();
                         scanner.nextLine(); // Consumir el salto de línea
