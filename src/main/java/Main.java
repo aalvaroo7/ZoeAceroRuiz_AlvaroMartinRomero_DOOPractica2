@@ -61,10 +61,6 @@ public class Main {
                     case 2:
                         System.out.print("Ingrese el nombre de la marca del televisor: ");
                         String nombreMarcaTelevisor = scanner.nextLine().toLowerCase();
-                        if (!MARCAS_TELEVISOR.contains(nombreMarcaTelevisor)) {
-                            System.out.println("Marca no existente.");
-                            break;
-                        }
                         Marca marcaTelevisor = gestor.buscarMarca(nombreMarcaTelevisor);
                         if (marcaTelevisor == null) {
                             System.out.println("Marca no encontrada.");
