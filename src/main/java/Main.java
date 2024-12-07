@@ -61,10 +61,19 @@ public class Main {
                     case 2:
                         System.out.print("Ingrese el nombre de la marca del televisor: ");
                         String nombreMarcaTelevisor = scanner.nextLine().toLowerCase();
+                        if (!MARCAS_TELEVISOR.contains(nombreMarcaTelevisor)) {
+                            System.out.println("Marca no existente.");
+                            break;
+                        }
                         Marca marcaTelevisor = gestor.buscarMarca(nombreMarcaTelevisor);
                         if (marcaTelevisor == null) {
-                            System.out.println("Marca no encontrada.");
-                            break;
+                            System.out.print("Ingrese el país de la marca: ");
+                            String paisMarcaTelevisor = scanner.nextLine();
+                            System.out.print("Ingrese la facturación de la marca (puede incluir caracteres monetarios): ");
+                            String facturacionStrTelevisor = scanner.nextLine();
+                            double facturacionMarcaTelevisor = parseFacturacion(facturacionStrTelevisor);
+                            marcaTelevisor = new Marca(nombreMarcaTelevisor, paisMarcaTelevisor, facturacionMarcaTelevisor);
+                            gestor.añadirMarca(marcaTelevisor);
                         }
                         System.out.print("Ingrese el nombre del televisor: ");
                         String nombreTelevisor = scanner.nextLine().toLowerCase();
