@@ -16,7 +16,7 @@ public class GestorElectronica {
     }
 
     public void añadirTelevisor(String nombreMarca, Televisor televisor) {
-        Marca marca = buscarMarca(nombreMarca);
+        Marca marca = buscarMarca(nombreMarca.toLowerCase());
         if (marca != null) {
             articulos.add(televisor);
         } else {
@@ -25,7 +25,7 @@ public class GestorElectronica {
     }
 
     public void añadirMovil(String nombreMarca, Movil movil) {
-        Marca marca = buscarMarca(nombreMarca);
+        Marca marca = buscarMarca(nombreMarca.toLowerCase());
         if (marca != null) {
             articulos.add(movil);
         } else {
