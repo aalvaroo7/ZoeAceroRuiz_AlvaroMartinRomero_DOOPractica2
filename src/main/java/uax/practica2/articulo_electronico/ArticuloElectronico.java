@@ -2,9 +2,9 @@ package uax.practica2.articulo_electronico;
 import uax.practica2.marca.Marca;
 
 public abstract class ArticuloElectronico {
-    private double precio;
-    private Marca marca;
-    private String nombre;
+    protected double precio;
+    protected Marca marca;
+    protected String nombre;
 
     public ArticuloElectronico(double precio, Marca marca, String nombre) {
         this.precio = precio;
