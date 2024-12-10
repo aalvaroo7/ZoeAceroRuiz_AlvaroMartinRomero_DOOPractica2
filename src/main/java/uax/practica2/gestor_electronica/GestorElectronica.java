@@ -5,6 +5,7 @@ import uax.practica2.movil.Movil;
 import uax.practica2.televisor.Televisor;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class GestorElectronica {
     private List<Marca> marcas = new ArrayList<>();
@@ -59,4 +60,29 @@ public class GestorElectronica {
             System.out.println(articulo.getNombre() + " - " + articulo.getMarca().getNombre() + " - " + articulo.getPrecio());
         }
     }
+
+    public void buscarTelevisor(String nombreMarca, String nombreArticulo, int pulgadas, String tipoPantalla, double precioDesde, double precioHasta) {
+        List<Predicate<Televisor>> todosPredicados = new ArrayList<>();
+
+        if (!nombreMarca.isEmpty())
+            todosPredicados.add(t -> t.getMarca().getNombre().equalsIgnoreCase(nombreMarca));
+        if (!nombreArticulo.isEmpty())
+            todosPredicados.add(t -> t.getNombre().equalsIgnoreCase(nombreArticulo));
+        if (pulgadas != 0)
+            todosPredicados.add(t -> t.getTamanioPulgadas() == pulgadas);
+        if (tipoPantalla != null && !tipoPantalla.isEmpty())
+            todosPredicados.add(t -> t.getTipoPantalla().equalsIgnoreCase(tipoPantalla));
+        if (precioDesde != 0.0)
+            todosPredicados.add(t -> t.getPrecio() >= precioDesde);
+        if (precioHasta != 0.0)
+            todosPredicados.add(t -> t.getPrecio() <= precioHasta);
+
+        Predicate<Televisor> compositePredicate = todosPredicados.stream().reduce(t -> true, Predicate::and);
+
+        articulos.stream()
+                .filter(a -> a instanceof Televisor)
+                .map(a -> (Televisor) a)
+                .filter(compositePredicate)
+                .forEach(t -> System.out.println(t.toString()));
+}
 }

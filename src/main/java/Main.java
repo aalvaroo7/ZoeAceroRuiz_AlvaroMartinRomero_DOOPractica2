@@ -44,12 +44,8 @@ public class Main {
 
                 switch (opcion) {
                     case 1:
-                        System.out.print("Ingrese el nombre de la marca (apple/android): ");
+                        System.out.print("Ingrese el nombre de la marca: ");
                         String nombreMarca = scanner.nextLine().toLowerCase();
-                        if (!nombreMarca.equals("apple") && !nombreMarca.equals("android")) {
-                            System.out.println("Marca no válida. Solo se permiten 'apple' o 'android'.");
-                            break;
-                        }
                         System.out.print("Ingrese el país de la marca: ");
                         String paisMarca = scanner.nextLine();
                         System.out.print("Ingrese la facturación de la marca (puede incluir caracteres monetarios): ");
@@ -61,19 +57,10 @@ public class Main {
                     case 2:
                         System.out.print("Ingrese el nombre de la marca del televisor: ");
                         String nombreMarcaTelevisor = scanner.nextLine().toLowerCase();
-                        if (!MARCAS_TELEVISOR.contains(nombreMarcaTelevisor)) {
-                            System.out.println("Marca no existente.");
-                            break;
-                        }
                         Marca marcaTelevisor = gestor.buscarMarca(nombreMarcaTelevisor);
                         if (marcaTelevisor == null) {
-                            System.out.print("Ingrese el país de la marca: ");
-                            String paisMarcaTelevisor = scanner.nextLine();
-                            System.out.print("Ingrese la facturación de la marca (puede incluir caracteres monetarios): ");
-                            String facturacionStrTelevisor = scanner.nextLine();
-                            double facturacionMarcaTelevisor = parseFacturacion(facturacionStrTelevisor);
-                            marcaTelevisor = new Marca(nombreMarcaTelevisor, paisMarcaTelevisor, facturacionMarcaTelevisor);
-                            gestor.añadirMarca(marcaTelevisor);
+                            System.out.println("Marca no encontrada. Por favor, añada la marca primero.");
+                            break;
                         }
                         System.out.print("Ingrese el nombre del televisor: ");
                         String nombreTelevisor = scanner.nextLine().toLowerCase();
@@ -83,8 +70,19 @@ public class Main {
                         System.out.print("Ingrese el tamaño en pulgadas del televisor: ");
                         int tamanioPulgadas = scanner.nextInt();
                         scanner.nextLine(); // Consumir el salto de línea
-                        System.out.print("Ingrese el tipo de pantalla del televisor: ");
-                        String tipoPantalla = scanner.nextLine();
+
+                        String tipoPantalla;
+                        while (true) {
+                            System.out.print("Ingrese el tipo de pantalla del televisor (LED, QLED, OLED, QNED): ");
+                            tipoPantalla = scanner.nextLine();
+                            if (tipoPantalla.equalsIgnoreCase("led") || tipoPantalla.equalsIgnoreCase("qled") ||
+                                    tipoPantalla.equalsIgnoreCase("oled") || tipoPantalla.equalsIgnoreCase("qned")) {
+                                break;
+                            } else {
+                                System.out.println("Tipo de pantalla no válido. Debe ser 'LED', 'QLED', 'OLED' o 'QNED'.");
+                            }
+                        }
+
                         Televisor televisor = new Televisor(precioTelevisor, marcaTelevisor, nombreTelevisor, tamanioPulgadas, tipoPantalla);
                         gestor.añadirTelevisor(nombreMarcaTelevisor, televisor);
                         break;
@@ -125,17 +123,21 @@ public class Main {
                         }
                         break;
                     case 5:
+                        System.out.print("Ingrese el nombre de la marca del televisor: ");
+                        String nombreMarcaBuscarTelevisor = scanner.nextLine().toLowerCase();
                         System.out.print("Ingrese el nombre del televisor: ");
                         String nombreTelevisorBuscar = scanner.nextLine().toLowerCase();
-                        Optional<ArticuloElectronico> televisorBuscar = gestor.getArticulos().stream()
-                                .filter(articulo -> articulo instanceof Televisor && articulo.getNombre().equalsIgnoreCase(nombreTelevisorBuscar))
-                                .findFirst();
-                        if (televisorBuscar.isPresent()) {
-                            Televisor televisorEncontrado = (Televisor) televisorBuscar.get();
-                            System.out.println("Televisor encontrado: " + televisorEncontrado.getNombre() + " - " + televisorEncontrado.getMarca().getNombre() + " - " + televisorEncontrado.getPrecio());
-                        } else {
-                            System.out.println("Televisor no encontrado.");
-                        }
+                        System.out.print("Ingrese el tamaño en pulgadas del televisor (0 para ignorar): ");
+                        int pulgadasBuscar = scanner.nextInt();
+                        scanner.nextLine(); // Consumir el salto de línea
+                        System.out.print("Ingrese el tipo de pantalla del televisor (deje en blanco para ignorar): ");
+                        String tipoPantallaBuscar = scanner.nextLine();
+                        System.out.print("Ingrese el precio mínimo del televisor (0 para ignorar): ");
+                        double precioDesdeBuscar = scanner.nextDouble();
+                        System.out.print("Ingrese el precio máximo del televisor (0 para ignorar): ");
+                        double precioHastaBuscar = scanner.nextDouble();
+                        scanner.nextLine(); // Consumir el salto de línea
+                        gestor.buscarTelevisor(nombreMarcaBuscarTelevisor, nombreTelevisorBuscar, pulgadasBuscar, tipoPantallaBuscar, precioDesdeBuscar, precioHastaBuscar);
                         break;
                     case 6:
                         System.out.print("Ingrese el nombre del móvil: ");
@@ -179,6 +181,6 @@ public class Main {
         } catch (ParseException e) {
             System.out.println("Error al parsear la facturación. Usando valor por defecto 0.");
             return 0;
-        }
-    }
+}
+}
 }
