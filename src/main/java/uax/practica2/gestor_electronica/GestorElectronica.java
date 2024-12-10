@@ -55,7 +55,9 @@ public class GestorElectronica {
     }
 
     public void listarArticulos() {
-        articulos.sort(Comparator.comparing(a -> a.getMarca().getNombre()));
+        articulos.sort(Comparator.comparing((ArticuloElectronico a) -> a.getMarca().getNombre())
+                .thenComparingDouble(ArticuloElectronico::getPrecio)
+                .thenComparing(ArticuloElectronico::getNombre));
         for (ArticuloElectronico articulo : articulos) {
             System.out.println(articulo.getNombre() + " - " + articulo.getMarca().getNombre() + " - " + articulo.getPrecio());
         }
